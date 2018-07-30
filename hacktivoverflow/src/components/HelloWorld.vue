@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <div class="centerx">
+    <div class="centerx" style="margin-top:20px;">
       <vs-row vs-align="flex" vs-type="flex"  vs-justify="space-around">
         <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="3" vs-sm="12" vs-xs="12">
           <img src="/img/fox.gif" width="300" height="300">
@@ -32,12 +32,15 @@
 </template>
 
 <script>
-var jwtDecode = require('jwt-decode');
+import db from '@/firebase/firebase.js'
 import { VueEditor } from 'vue2-editor'
+import jwt from 'jsonwebtoken'
+
 export default {
   name: 'HelloWorld',
   components: {
-    VueEditor
+    VueEditor,
+   
   },
   props: {
     msg: String
@@ -51,9 +54,21 @@ export default {
     addQuestion(){
       let token =localStorage.getItem("token")
       console.log(this.content)
-      let decoded = jwtDecode(token)
-      console.log(decode)
-    }
+      try {
+        var decoded = jwt.verify(token, 'hacktiv8');
+        var newPostKey = firebase.database().ref().child('Question').push().key;
+        firebase.database().ref('Questions/' + newPostKey).set({
+          name: decoded.name,
+          qid : newPostKey,
+          uid: decoded.id,
+          content: this.content,
+          vote: 0,
+        })
+        this.content = `<h1>Question Again ??</h1>`
+      } catch(err) {
+        console.log(err.message)
+      }
+    },
   }
 }
 </script>

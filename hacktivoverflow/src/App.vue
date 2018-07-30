@@ -39,7 +39,12 @@
          <vs-alert :vs-active="!validName" vs-color="danger" vs-icon="new_releases" >
            Fields can not be empty please enter the data
          </vs-alert>
-         
+         <facebook-login class="button"
+            appId="548038762266220"
+            @login="getUserData"
+            @logout="onLogout"
+            @get-initial-status="getUserData">
+          </facebook-login>
        </div>
      </vs-prompt>
 
@@ -59,12 +64,7 @@
          </vs-alert>
        </div>
      </vs-prompt>
-      <facebook-login class="button"
-      appId="548038762266220"
-      @login="getUserData"
-      @logout="onLogout"
-      @get-initial-status="getUserData">
-      </facebook-login>
+      
 
     <router-view/>
   </div>
@@ -113,10 +113,16 @@ export default {
       this.hasLogin = true
     }
   },
+  // watch:{
+    // name:function(){
+    //   console.log(this.name)
+    // }
+  // },
   methods:{
     signIn(){
       console.log("disign In")
-       this.activeSignIn = true
+      this.getUserData()
+      this.activeSignIn = true
     },
     signUp(){
       console.log("disign Up")
@@ -167,25 +173,27 @@ export default {
       })
     },
      getUserData() {
-      
-      FB.api('/me', 'GET', { fields: 'id,name,email,accesToken' },
+      FB.api('/me', 'GET', { fields: 'id,name,email' },
         userInformation => {
           this.personalID = userInformation.id;
           this.email = userInformation.email;
           this.name = userInformation.name;
-          // this.SignUp.name = userInformation.name;
-          // this.SignUp.email = userInformation.email;
-          // this.activeSignUp = true;
-          console.log(userInformation.email)
-          console.log(userInformation)
+          console.log('past',userInformation.email)
+          console.log('past',userInformation)
+          if(this.activeSignIn && this.isConnected){
+            this.SignUp.name =  this.name
+            this.SignUp.email =  this.email
+            this.SignUp.password =  this.nasme.split(' ')[0]+'kece'+123
+            console.log('ini pass sign', this.signUp.password)
+          }
         })
     },
     sdkLoaded(payload) {
       this.isConnected = payload.isConnected
       this.FB = payload.FB
       console.log(payload)
+      console.log('dimana nihhh')
       if (this.isConnected) this.getUserData()
-
     },
     onLogin() {
       this.isConnected = true
