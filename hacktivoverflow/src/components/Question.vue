@@ -10,13 +10,13 @@
         </vs-row>
         <br>
         <vs-row>
-             <md-button class="md-fab md-mini md-plain" v-on:click="downVote(question.qid, question.vote)">
+             <md-button class="md-fab md-mini md-plain" v-on:click="downVote(question)">
                 <i class="material-icons">
                     thumb_down
                 </i>
                 </md-button>
                 <vs-avatar :vs-badge="question.vote" v-bind:vs-text="question.name" vs-size="large"/>
-                <md-button class="md-fab md-mini md-plain" v-on:click="upVote(question.qid, question.vote)">
+                <md-button class="md-fab md-mini md-plain" v-on:click="upVote(question)">
                 <i class="material-icons" >
                   thumb_up
                 </i>
@@ -34,6 +34,7 @@
 
 
 <script>
+import jwt from 'jsonwebtoken'
 import { VueEditor } from 'vue2-editor'
 import Answers from '@/components/Answers.vue'
 
@@ -67,22 +68,48 @@ export default {
         }
         this.questions = tempQuestions
       },
-      upVote(qid, vote){
-        console.log("===upvote===")
-        console.log("badge",vote)
-        console.log("qid",qid)
-        console.log("===upvote===")
-        let upvote = Number(vote)+1 
-        console.log(upvote)
-        var updates = {};
-        updates['Questions/' + qid + '/vote/'] = upvote;
-        firebase.database().ref().update(updates);
+      upVote(question){
+        let token =localStorage.getItem("token")
+        let vote = question.vote
+        let qid = question.qid
+        let uid = question.uid
+        try{
+         var decoded = jwt.verify(token, 'hacktiv8');
+         if(decoded.id != uid){
+            let upvote = Number(vote)+1 
+            var updates = {};
+            updates['Questions/' + qid + '/vote/'] = upvote;
+            firebase.database().ref().update(updates);
+         }
+         
+        }catch(err){
+          console.log(err.message)
+        }
+        
       },  
-      downVote(qid, vote){
+      downVote(question){
+        let token =localStorage.getItem("token")
+        let vote = question.vote
+        let qid = question.qid
+        let uid = question.uid
         console.log("===downvote===")
         console.log("badge",vote)
         console.log("qid",qid)
         console.log("===downvote===")
+        if(vote > 0){
+          try{
+            var decoded = jwt.verify(token, 'hacktiv8');
+            if(decoded.id != uid){
+                let downvote = Number(vote)-1 
+                var updates = {};
+                updates['Questions/' + qid + '/vote/'] = downvote;
+                firebase.database().ref().update(updates);
+            }
+         
+          }catch(err){
+            console.log(err.message)
+          }
+        }
       }
   }
 }

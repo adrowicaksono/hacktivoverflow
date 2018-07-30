@@ -21,7 +21,13 @@
               <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-lg="2" vs-sm="4" vs-xs="12">
                 <vs-button v-show="!hasLogin" v-on:click="signUp" class="becenter" vs-color="success" vs-type="relief">Sign Up</vs-button>
                 <vs-button v-show="!hasLogin" v-on:click="signIn" class="becenter" vs-color="success" vs-type="relief">Sign In</vs-button>
-                <vs-button v-show="hasLogin" v-on:click="signOut"  vs-color="warning"  class="becenter" vs-type="relief">Sign Out</vs-button>
+                <vs-button v-if="hasLogin  && !isFacebook" v-on:click="signOut"  vs-color="warning"  class="becenter" vs-type="relief">Sign Out</vs-button>
+                <facebook-login  v-if="isFacebook" class="button"
+                  appId="548038762266220"
+                  @login="getUserData"
+                  @logout="onLogout"
+                  @get-initial-status="getUserData">
+                </facebook-login>
               </vs-col>
           </vs-row>
       </vs-topbar>
@@ -74,7 +80,7 @@
 
 <script>
 import axios from 'axios'
-
+import jwt from 'jsonwebtoken'
 import facebookLogin from 'facebook-login-vuejs';
 
 
@@ -84,6 +90,7 @@ export default {
     },
   data(){
     return{
+      isFacebook : false,
       hasLogin : false,
       activeSignUp : false,
       titleDialog2 : "Sign Up",
@@ -113,11 +120,25 @@ export default {
       this.hasLogin = true
     }
   },
-  // watch:{
-    // name:function(){
-    //   console.log(this.name)
-    // }
-  // },
+  watch:{
+    name:function(){
+      if(typeof this.name != 'undefined'){
+        let id = this.personalID
+        let email = this.email
+        let name = this.name
+        var token = jwt.sign({id:id, email:email, name:name}, 'hacktiv8')
+          console.log("its time to signup", this.name, this.email, this.personalID)
+          console.log("its time to signup", token)
+          localStorage.setItem("token", token)
+          this.isFacebook = true
+          this.hasLogin = true
+          this.activeSignIn = true
+      }else{
+        this.isFacebook = false 
+        localStorage.clear()
+      }
+    }
+  },
   methods:{
     signIn(){
       console.log("disign In")
@@ -178,14 +199,10 @@ export default {
           this.personalID = userInformation.id;
           this.email = userInformation.email;
           this.name = userInformation.name;
+          console.log('past',userInformation.error)
           console.log('past',userInformation.email)
           console.log('past',userInformation)
-          if(this.activeSignIn && this.isConnected){
-            this.SignUp.name =  this.name
-            this.SignUp.email =  this.email
-            this.SignUp.password =  this.nasme.split(' ')[0]+'kece'+123
-            console.log('ini pass sign', this.signUp.password)
-          }
+          
         })
     },
     sdkLoaded(payload) {
