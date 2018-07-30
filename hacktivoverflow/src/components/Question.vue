@@ -46,13 +46,13 @@
                 :vs-active.sync="answer1"
                 vs-closable>
                   <vue-editor v-model="content"></vue-editor>
+                 
                 </vs-alert>
 
                 <vs-alert
                 :vs-active.sync="answer1"
                 :vs-icon.sync="icon1"
                 vs-closable>
-                  
                       <vs-row>
                         <h3>USER ID</h3>
                       </vs-row>

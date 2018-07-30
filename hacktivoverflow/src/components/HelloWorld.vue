@@ -17,6 +17,7 @@
                 </md-card-header>
                 <md-card-content>
                  <vue-editor v-model="content"></vue-editor>
+                  <vs-button v-on:click="addQuestion" vs-type="relief">Submit</vs-button>
                 </md-card-content>
                 <md-card-actions>
                   <md-button>Action</md-button>
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+var jwtDecode = require('jwt-decode');
 import { VueEditor } from 'vue2-editor'
 export default {
   name: 'HelloWorld',
@@ -43,6 +45,14 @@ export default {
   data(){
     return{
       content: '<h1>Some initial content</h1>'  
+    }
+  },
+  methods:{
+    addQuestion(){
+      let token =localStorage.getItem("token")
+      console.log(this.content)
+      let decoded = jwtDecode(token)
+      console.log(decode)
     }
   }
 }

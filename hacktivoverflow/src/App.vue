@@ -19,11 +19,9 @@
                 </div>
               </vs-col>
               <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-lg="2" vs-sm="4" vs-xs="12">
-                <router-link to="/">Home</router-link> |
-                <router-link to="/about">About</router-link> |
-                <vs-button v-on:click="signUp" class="becenter" vs-color="success" vs-type="relief">Sign Up</vs-button>
-                <vs-button v-on:click="signIn" class="becenter" vs-color="success" vs-type="relief">Sign In</vs-button>
-                <vs-button vs-color="warning"  class="becenter" vs-type="relief">Sign Out</vs-button>
+                <vs-button v-show="!hasLogin" v-on:click="signUp" class="becenter" vs-color="success" vs-type="relief">Sign Up</vs-button>
+                <vs-button v-show="!hasLogin" v-on:click="signIn" class="becenter" vs-color="success" vs-type="relief">Sign In</vs-button>
+                <vs-button v-show="hasLogin" v-on:click="signOut"  vs-color="warning"  class="becenter" vs-type="relief">Sign Out</vs-button>
               </vs-col>
           </vs-row>
       </vs-topbar>
@@ -41,6 +39,7 @@
          <vs-alert :vs-active="!validName" vs-color="danger" vs-icon="new_releases" >
            Fields can not be empty please enter the data
          </vs-alert>
+         
        </div>
      </vs-prompt>
 
@@ -60,7 +59,12 @@
          </vs-alert>
        </div>
      </vs-prompt>
-
+      <facebook-login class="button"
+      appId="548038762266220"
+      @login="getUserData"
+      @logout="onLogout"
+      @get-initial-status="getUserData">
+      </facebook-login>
 
     <router-view/>
   </div>
@@ -69,11 +73,18 @@
 
 
 <script>
+import axios from 'axios'
+
+import facebookLogin from 'facebook-login-vuejs';
 
 
 export default {
+  components: {
+        facebookLogin
+    },
   data(){
     return{
+      hasLogin : false,
       activeSignUp : false,
       titleDialog2 : "Sign Up",
       SignUp:{
@@ -88,7 +99,18 @@ export default {
         password:''
       },
       selectedQuestion: '',
-       question: ['More Question']
+       question: ['More Question'],
+       isConnected: false,
+      name: '',
+      email: '',
+      personalID: '',
+      FB : null,
+      
+    }
+  },
+  created(){
+     if(localStorage.token){
+      this.hasLogin = true
     }
   },
   methods:{
@@ -100,14 +122,80 @@ export default {
       console.log("disign Up")
       this.activeSignUp = true
     },
+    signOut(){
+      this.hasLogin = false
+      localStorage.clear()
+    },
     signInAcc(){
       console.log("di accept")
       console.log(this.SignIn.email, this.SignIn.password)
+      axios
+      .post('http://hacktivoverflowserver.adrowicaksono.xyz/auth', {
+        email: this.SignIn.email,
+        password: this.SignIn.password
+      })
+      .then((respons)=>{
+        console.log(respons.data.token)
+        this.hasLogin = true
+        localStorage.setItem("token", respons.data.token)
+        localStorage.setItem("userId", respons.data.userId)
+        this.hasLogin = true
+        this.SignIn.email = ''
+        this.SignIn.password = ''
+      })
+      .catch(function(err){
+        console.log(err.message)
+      })
     },
     signUpAcc(){
       console.log("di accept")
       console.log(this.SignUp.name, this.SignUp.email, this.SignUp.password)
+      
+      axios
+      .post('http://hacktivoverflowserver.adrowicaksono.xyz/users', {
+        name:this.SignUp.name,
+        email:this.SignUp.email,
+        password:this.SignUp.password,
+      })
+      .then((respons)=>{
+        console.log(respons)
+        this.SignIn.email = this.SignUp.email
+        this.activeSignIn = true
+      })
+      .catch(function(err){
+        console.log(err.me)
+      })
+    },
+     getUserData() {
+      
+      FB.api('/me', 'GET', { fields: 'id,name,email,accesToken' },
+        userInformation => {
+          this.personalID = userInformation.id;
+          this.email = userInformation.email;
+          this.name = userInformation.name;
+          // this.SignUp.name = userInformation.name;
+          // this.SignUp.email = userInformation.email;
+          // this.activeSignUp = true;
+          console.log(userInformation.email)
+          console.log(userInformation)
+        })
+    },
+    sdkLoaded(payload) {
+      this.isConnected = payload.isConnected
+      this.FB = payload.FB
+      console.log(payload)
+      if (this.isConnected) this.getUserData()
+
+    },
+    onLogin() {
+      this.isConnected = true
+      this.getUserData()
+    },
+    onLogout() {
+      console.log(this.name, this.personalID)
+      this.isConnected = false;
     }
+  
   }
 }
 </script>
@@ -132,7 +220,12 @@ export default {
     }
   }
 .becenter{
-  margin:px;  
+  margin-top:30px;
+  margin-right: 10px; 
+  padding: 10px;  
 }
 }
 </style>
+
+
+
