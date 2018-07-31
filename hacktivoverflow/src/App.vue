@@ -132,7 +132,7 @@ export default {
           localStorage.setItem("token", token)
           this.isFacebook = true
           this.hasLogin = true
-          this.activeSignIn = true
+          this.activeSignIn = false
       }else{
         this.isFacebook = false 
         localStorage.clear()
@@ -217,7 +217,10 @@ export default {
       this.getUserData()
     },
     onLogout() {
+      this.isFacebook = false 
+      this.hasLogin = false
       console.log(this.name, this.personalID)
+      localStorage.clear()
       this.isConnected = false;
     }
   
