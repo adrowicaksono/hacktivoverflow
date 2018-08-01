@@ -82,7 +82,8 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import facebookLogin from 'facebook-login-vuejs';
-
+// import nodemailer from 'nodemailer'
+import swal from 'sweetalert2'
 
 export default {
   components: {
@@ -157,7 +158,7 @@ export default {
       console.log("di accept")
       console.log(this.SignIn.email, this.SignIn.password)
       axios
-      .post('http://hacktivoverflowserver.adrowicaksono.xyz/auth', {
+      .post('https://hacktivoverflowserver.adrowicaksono.xyz/auth', {
         email: this.SignIn.email,
         password: this.SignIn.password
       })
@@ -179,7 +180,7 @@ export default {
       console.log(this.SignUp.name, this.SignUp.email, this.SignUp.password)
       
       axios
-      .post('http://hacktivoverflowserver.adrowicaksono.xyz/users', {
+      .post('https://hacktivoverflowserver.adrowicaksono.xyz/users', {
         name:this.SignUp.name,
         email:this.SignUp.email,
         password:this.SignUp.password,
@@ -188,6 +189,7 @@ export default {
         console.log(respons)
         this.SignIn.email = this.SignUp.email
         this.activeSignIn = true
+        this.mailer(this.SignUp.email)
       })
       .catch(function(err){
         console.log(err.me)
@@ -222,8 +224,42 @@ export default {
       console.log(this.name, this.personalID)
       localStorage.clear()
       this.isConnected = false;
-    }
-  
+    },
+    // mailer(email){
+
+    //   let transporter = nodemailer.createTransport({
+    //         host: 'smtp.gmail.com',
+    //         port: 587,
+    //         secure: false,
+    //         auth:{
+    //             user : 'adrowicaks@gmail.com',
+    //             pass : 'abcd1234>'
+    //         }
+    //     })
+
+    //     let mailOptions = {
+    //         from: '"adrowicaksono" adrowicaksono@gmail.com',
+    //         to : email,
+    //         subject : "hello",
+    //         text: mail,
+    //         html:`<b> Hello world ${email}<b>
+    //              <p> conngratulation, now you have joined with us. </p>`
+    //     }
+
+    //     transporter.sendMail(mailOptions, (err, info)=>{
+    //         if(err){
+    //             return console.log(err)
+    //         }
+    //         console.log('Message sent: %s', info.messageId)
+    //         console.log('Preview URL: %s',
+    //         nodemailer.getTestMessageUrl(info))
+    //         swal(
+    //             'Good job!',
+    //             'successfully registration, check your email now. ',
+    //             'success'
+    //         )
+    //     })
+    // },
   }
 }
 </script>
