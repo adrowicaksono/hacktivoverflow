@@ -23,7 +23,7 @@
                 <vs-button v-show="!hasLogin" v-on:click="signIn" class="becenter" vs-color="success" vs-type="relief">Sign In</vs-button>
                 <vs-button v-if="hasLogin  && !isFacebook" v-on:click="signOut"  vs-color="warning"  class="becenter" vs-type="relief">Sign Out</vs-button>
                 <facebook-login  v-if="isFacebook" class="button"
-                  appId="548038762266220"
+                  appId="935675349937864"
                   @login="getUserData"
                   @logout="onLogout"
                   @get-initial-status="getUserData">
@@ -46,7 +46,7 @@
            Fields can not be empty please enter the data
          </vs-alert>
          <facebook-login class="button"
-            appId="548038762266220"
+            appId="935675349937864"
             @login="getUserData"
             @logout="onLogout"
             @get-initial-status="getUserData">
