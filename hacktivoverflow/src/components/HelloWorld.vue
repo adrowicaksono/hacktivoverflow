@@ -63,8 +63,8 @@ export default {
           uid: decoded.id,
           content: this.content,
           vote: 0,
-          upvote : [],
-          downvote : [],
+          upvote: '',
+          downvote: '',
         })
         this.content = `<h1>Question Again ??</h1>`
       } catch(err) {

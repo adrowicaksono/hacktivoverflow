@@ -74,12 +74,17 @@ export default {
         let qid = question.qid
         let uid = question.uid
         try{
-         var decoded = jwt.verify(token, 'hacktiv8');
+          var decoded = jwt.verify(token, 'hacktiv8');
          if(decoded.id != uid){
-            let upvote = Number(vote)+1 
-            var updates = {};
-            updates['Questions/' + qid + '/vote/'] = upvote;
-            firebase.database().ref().update(updates);
+           let arrvote = question.upvote.split(',') 
+            if(arrvote.indexOf(decoded.id) === -1){
+              console.log("===========",question.downvote)
+              this.spliceDownvote(decoded.id, question.downvote, question.qid)
+              this.countUpvote(question.qid, question.vote)
+              var updates = {};
+              updates['Questions/' + qid + '/upvote/'] = question.upvote +','+decoded.id;
+              firebase.database().ref().update(updates);
+            } 
          }
          
         }catch(err){
@@ -96,21 +101,58 @@ export default {
         console.log("badge",vote)
         console.log("qid",qid)
         console.log("===downvote===")
-        if(vote > 0){
+        // if(vote > 0){
           try{
             var decoded = jwt.verify(token, 'hacktiv8');
             if(decoded.id != uid){
-                let downvote = Number(vote)-1 
-                var updates = {};
-                updates['Questions/' + qid + '/vote/'] = downvote;
-                firebase.database().ref().update(updates);
+                let arrvote = question.downvote.split(',')
+                if(arrvote.indexOf(decoded.id) === -1){
+                  this.spliceUpvote(decoded.id, question.upvote, question.qid)
+                  this.countDownvote(question.qid, question.vote)
+                  var updates = {};
+                  updates['Questions/' + qid + '/downvote/'] =  question.downvote +','+decoded.id;
+                  firebase.database().ref().update(updates);
+                }
             }
          
           }catch(err){
             console.log(err.message)
           }
+        // }
+      },
+      spliceUpvote(id, upvote, qid){
+        let arrvote = upvote.split(',')
+        let idVote = arrvote.indexOf(id)
+        arrvote.splice(idVote, 1)
+        let update = arrvote.join(',')
+        var updates = {};
+        updates['Questions/' + qid + '/upvote/'] = update;
+        firebase.database().ref().update(updates); 
+      },
+      spliceDownvote(id, downvote, qid){
+        console.log('----------',downvote)
+        let arrvote = downvote.split(',')
+        let idVote = arrvote.indexOf(id)
+        arrvote.splice(idVote, 1)
+        let update = arrvote.join(',')
+        var updates = {};
+        updates['Questions/' + qid + '/downvote/'] = update;
+        firebase.database().ref().update(updates);
+      },
+      countUpvote(qid, vote){
+        let update = Number(vote) + 1
+        var updates = {};
+        updates['Questions/' + qid + '/vote/'] = update ;
+        firebase.database().ref().update(updates);
+      },
+      countDownvote(qid, vote){
+        let update = Number(vote) - 1
+        if(update >= 0){
+          var updates = {};
+          updates['Questions/' + qid + '/vote/'] = update ;
+          firebase.database().ref().update(updates);
         }
-      }
+      },
   }
 }
 </script>
