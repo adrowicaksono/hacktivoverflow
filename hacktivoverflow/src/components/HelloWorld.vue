@@ -84,7 +84,6 @@ export default {
         .catch ( err => {
           this.error = err.response.data.msg
         })
-        console.log(this.content)
       }else{
         this.error = "you don't have access"
       }

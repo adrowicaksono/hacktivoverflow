@@ -2,7 +2,9 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 const isUserActive = function ( req, res, next) {
+    console.log(req.headers.authorization, "is user active")
     jwt.verify( req.headers.authorization, process.env.tokenSecretKey, function(err, decoded){
+        if(err) res.status(401).json({msg:"invalid token"})
         console.log('is user active',decoded)
         User
         .findById(decoded.id)
