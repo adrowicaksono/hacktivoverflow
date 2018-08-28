@@ -49,47 +49,31 @@ const filterZeroAnswer = function (collections){
                 console.log(lowRateQuestion[randomIdx], "this low rate")
                 console.log(el)
                 console.log("=======================================")
-                // let sent = queue.create('sentQuestion', {
-                //                 questionGuest : lowRateQuestion[randomIdx],
-                //                 to : el
-                //             })
-                
-                // sent.on('complete', function(result){
-                //         console.log('Job completed with data ', result);
-                //     }).on('failed attempt', function(errorMessage, doneAttempts){
-                //         console.log('Job failed attempt', errorMessage);
-                //     }).on('failed', function(errorMessage){
-                //         console.log('Job failed', errorMessage);
-                //     }).on('progress', function(progress, data){
-                //         console.log('\r  job #' + sent.id + ' ' + progress + '% complete with data ', data );
-                //     });
+                let sentQuestion = queue.create('sent', {
+                    title : "sent low rate question",
+                    question : lowRateQuestion[randomIdx],
+                    to : el
+                })
+                sentQuestion.priority('medium').save() 
+
                 })
         })
         .catch( err => {
             console.log("from get email :", err)
         })
-        // let mails = {
-        //       to : 'adrowicaksono@gmail.com',
-        //       subject : 'object2',
-        //       text : `apakah kamu mau membantu ${lowRateQuestion.name}, dia menanyakan :`,
-        //       html : lowRateQuestion.content
-        // }
-        // gmailSent(mails)    
+           
 }
 const getCollections = function(){
     var db = admin.database();
     var ref = db.ref("Questions");
     ref.once("value", function(snapshot) {
       let collections = Object.entries(snapshot.val())
-    //   console.log(collections)
     filterZeroAnswer(collections)
     });
 }
   
+// getCollections()
 
-// const getQuestionWithZeroAnswer = getCollections(function(collections){
-//     return collections
-// })
 
 module.exports = {
     getCollections

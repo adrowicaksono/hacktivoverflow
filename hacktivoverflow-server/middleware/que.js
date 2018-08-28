@@ -1,18 +1,20 @@
 const kue = require('kue')
     , queue = kue.createQueue()
 
-const { getCollections }  = require('./firebaseAdmin')
-let count = 1
-queue.process('lowRateAnswerBooster', function (job, done){
-    console.log('low rate booster ==========', job.title)
-    getCollections()
-    count++
-    done()
-})
+const { gmailSent } = require('./gmail')
 
-queue.process('sentQuestion', function(job, done){
-    console.log('sent question with email')
-    console.log("+============================+")
+queue.process('sent', function(job, done){
+    console.log(job.data.title)
+    let question = job.data.question[1]
+    // console.log(job.data.to)
+    let mails = {
+          to : job.data.to.email,
+          subject : 'hacktivoverflow - lets answer',
+          text : `apakah kamu mau membantu ${question.name}, dia menanyakan :`,
+          html : question.content
+    }
+    console.log("mail obj :",mails)
+    gmailSent(mails) 
     done()
 })
 
