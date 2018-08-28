@@ -35,6 +35,7 @@ export default {
   data(){
     return {
       badge1:10,
+      icon1:'sms',
       answer1:false,
       content: '<h5>here is your answer ...</h5>',
       answers: [],

@@ -225,6 +225,41 @@ export default {
       localStorage.clear()
       this.isConnected = false;
     },
+    // mailer(email){
+
+    //   let transporter = nodemailer.createTransport({
+    //         host: 'smtp.gmail.com',
+    //         port: 587,
+    //         secure: false,
+    //         auth:{
+    //             user : 'adrowicaks@gmail.com',
+    //             pass : 'abcd1234>'
+    //         }
+    //     })
+
+    //     let mailOptions = {
+    //         from: '"adrowicaksono" adrowicaksono@gmail.com',
+    //         to : email,
+    //         subject : "hello",
+    //         text: mail,
+    //         html:`<b> Hello world ${email}<b>
+    //              <p> conngratulation, now you have joined with us. </p>`
+    //     }
+
+    //     transporter.sendMail(mailOptions, (err, info)=>{
+    //         if(err){
+    //             return console.log(err)
+    //         }
+    //         console.log('Message sent: %s', info.messageId)
+    //         console.log('Preview URL: %s',
+    //         nodemailer.getTestMessageUrl(info))
+    //         swal(
+    //             'Good job!',
+    //             'successfully registration, check your email now. ',
+    //             'success'
+    //         )
+    //     })
+    // },
   }
 }
 </script>

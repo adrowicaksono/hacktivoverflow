@@ -6,7 +6,7 @@
       </vs-card-header>
       <vs-card-body>
         <vs-row style="padding:50px;" vs-type="flex" vs-justify="center" vs-align="flex-start" vs-w="12" v-html="question.content"  >
-            {{question.content}}
+                  {{question.content}}
         </vs-row>
         <br>
         <vs-row>
@@ -14,18 +14,12 @@
                 <i class="material-icons">
                     thumb_down
                 </i>
-            </md-button>
+                </md-button>
                 <vs-avatar :vs-badge="question.vote" v-bind:vs-text="question.name" vs-size="large"/>
-            <md-button class="md-fab md-mini md-plain" v-on:click="upVote(question)">
+                <md-button class="md-fab md-mini md-plain" v-on:click="upVote(question)">
                 <i class="material-icons" >
                   thumb_up
                 </i>
-            </md-button>
-            <md-button class="md-fab md-mini md-plain" @click="editQuestion(question)">
-              <md-icon >edit</md-icon>
-            </md-button>
-            <md-button class="md-fab md-mini md-plain" @click="deleteContent(question)">
-              <md-icon >delete</md-icon>
             </md-button>
         </vs-row>
       </vs-card-body>
@@ -35,13 +29,6 @@
           />
       </vs-card-footer>    
     </vs-card>
-     <div class="centerx">
-
-    <vs-popup class="holamundo" :bind:vs-title="qidEdited" :vs-active="popupActivo4" @vs-cancel="popupActivo4=false">
-      <vue-editor v-model="contentEdited"></vue-editor>
-        <vs-button v-on:click="editAcc" vs-type="relief">Submit</vs-button>
-    </vs-popup>
-  </div>
   </div>
 </template>
 
@@ -64,46 +51,16 @@ export default {
       content: '<h1>What is your Question ?</h1>',
       questions: [],
       answers : [],
-      popupActivo4 :false,
-      contentEdited : '',
-      qidEdited:'',
     }
   },
   mounted(){
     var question = firebase.database().ref('Questions');
+    
     question.on('value', snapshot =>{
       this.getNewPost(snapshot.val());
     });
   },
   methods:{
-      deleteContent(question){
-        let token =localStorage.getItem("token")
-        var decoded = jwt.verify(token, 'hacktiv8');
-        let qid = question.qid
-        if(decoded.id == question.uid){
-          firebase.database().ref('Questions/' + qid).set(null);
-          this.popupActivo4 = false
-        }
-      },
-      editAcc(){
-          let newContent = this.contentEdited
-          let qid = this.qidEdited
-         var updates = {};
-         updates['Questions/' + qid + '/content/'] =  newContent;
-         firebase.database().ref().update(updates);
-         this.popupActivo4 = false
-      },
-      editQuestion(question){
-        let token =localStorage.getItem("token")
-        var decoded = jwt.verify(token, 'hacktiv8');
-        if(decoded.id == question.uid){
-          this.contentEdited = question.content
-          this.qidEdited = question.qid
-          
-          this.popupActivo4 = true
-          console.log("=======apaaaa======", this.contentEdited, this.qidEdited)
-        }
-      },
       getNewPost(snapshot){
         let tempQuestions = []
         for(let i in snapshot){
@@ -140,10 +97,10 @@ export default {
         let vote = question.vote
         let qid = question.qid
         let uid = question.uid
-        // console.log("===downvote===")
-        // console.log("badge",vote)
-        // console.log("qid",qid)
-        // console.log("===downvote===")
+        console.log("===downvote===")
+        console.log("badge",vote)
+        console.log("qid",qid)
+        console.log("===downvote===")
         // if(vote > 0){
           try{
             var decoded = jwt.verify(token, 'hacktiv8');
@@ -173,7 +130,7 @@ export default {
         firebase.database().ref().update(updates); 
       },
       spliceDownvote(id, downvote, qid){
-        // console.log('----------',downvote)
+        console.log('----------',downvote)
         let arrvote = downvote.split(',')
         let idVote = arrvote.indexOf(id)
         arrvote.splice(idVote, 1)

@@ -52,7 +52,6 @@ export default {
   },
   methods:{
     addQuestion(){
-      //cek user aktif ke mongo
       let token =localStorage.getItem("token")
       console.log(this.content)
       try {
