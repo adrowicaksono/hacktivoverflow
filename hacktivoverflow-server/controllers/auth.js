@@ -28,7 +28,7 @@ const login = function(req,res){
                         })
                     }else{
                         res
-                            .status(401)
+                            .status(400)
                             .json({
                                 msg : "wrong password"
                             })
@@ -38,17 +38,19 @@ const login = function(req,res){
         }else{
             res
                 .status(400)
-                .json("email unregister")
+                .json({
+                    msg:"email unregister"
+                })
         }
     })
     .catch(function(err){
         res
-        .status(401)
+        .status(400)
         .json({
-            msg : err.message
+            msg : "your token is not valid"
         })
     })
-    console.log(email, password)
+    console.log(email, password, "login")
 }
 
 loginFacebook = function(req,res){

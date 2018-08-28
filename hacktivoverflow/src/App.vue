@@ -32,6 +32,7 @@
           </vs-row>
       </vs-topbar>
     </div>
+
     <vs-prompt
       @vs-cancel="SignIn.email='',SignIn.password=''"
       @vs-accept="signInAcc"
@@ -39,9 +40,9 @@
       :vs-active.sync="activeSignIn"
       :vs-title="titleDialog1">
        <div class="con-exemple-prompt">
-         Enter your email dan password to <b>continue</b>.
+         Enter your email dan password to <b>continue</b>
          <vs-input placeholder="email" v-model="SignIn.email"/>
-         <vs-input placeholder="password" v-model="SignIn.password"/>
+         <vs-input type="password" placeholder="password" v-model="SignIn.password"/>
          <vs-alert :vs-active="!validName" vs-color="danger" vs-icon="new_releases" >
            Fields can not be empty please enter the data
          </vs-alert>
@@ -64,14 +65,14 @@
          Enter your name, email and password to <b>continue</b>.
          <vs-input placeholder="name" v-model="SignUp.name"/>
          <vs-input placeholder="email" v-model="SignUp.email"/>
-         <vs-input placeholder="password" v-model="SignUp.password"/>
+         <vs-input type="password" placeholder="password" v-model="SignUp.password"/>
          <vs-alert :vs-active="!validName" vs-color="danger" vs-icon="new_releases" >
            Fields can not be empty please enter the data
          </vs-alert>
        </div>
      </vs-prompt>
       
-
+    <p style="color:red"><strong>{{error}}</strong></p>
     <router-view/>
   </div>
 </template>
@@ -84,13 +85,15 @@ import jwt from 'jsonwebtoken'
 import facebookLogin from 'facebook-login-vuejs';
 // import nodemailer from 'nodemailer'
 import swal from 'sweetalert2'
-
+import BASE_URL from '@/BASE_URL/BASE_URL'
 export default {
   components: {
         facebookLogin
     },
   data(){
     return{
+      validName :'',
+      error : '' ,
       isFacebook : false,
       hasLogin : false,
       activeSignUp : false,
@@ -117,8 +120,11 @@ export default {
     }
   },
   created(){
+    
      if(localStorage.token){
       this.hasLogin = true
+    }else{
+      
     }
   },
   watch:{
@@ -158,21 +164,23 @@ export default {
       console.log("di accept")
       console.log(this.SignIn.email, this.SignIn.password)
       axios
-      .post('https://hacktivoverflowserver.adrowicaksono.xyz/auth', {
+      .post(BASE_URL+'auth', {
         email: this.SignIn.email,
         password: this.SignIn.password
       })
       .then((respons)=>{
-        console.log(respons.data.token)
         this.hasLogin = true
         localStorage.setItem("token", respons.data.token)
         localStorage.setItem("userId", respons.data.userId)
         this.hasLogin = true
         this.SignIn.email = ''
         this.SignIn.password = ''
+        this.error = ''
       })
-      .catch(function(err){
-        console.log(err.message)
+      .catch( (err) => {
+        this.SignIn.email = ''
+        this.SignIn.password = ''
+        this.error = err.response.data.msg
       })
     },
     signUpAcc(){
@@ -180,7 +188,7 @@ export default {
       console.log(this.SignUp.name, this.SignUp.email, this.SignUp.password)
       
       axios
-      .post('https://hacktivoverflowserver.adrowicaksono.xyz/users', {
+      .post(BASE_URL+'users', {
         name:this.SignUp.name,
         email:this.SignUp.email,
         password:this.SignUp.password,
@@ -189,10 +197,15 @@ export default {
         console.log(respons)
         this.SignIn.email = this.SignUp.email
         this.activeSignIn = true
-        this.mailer(this.SignUp.email)
+        this.SignUp.name = '',
+        this.SignUp.email = '',
+        this.SignUp.password = ''
       })
-      .catch(function(err){
-        console.log(err.me)
+      .catch( (err) => {
+        this.error = err.response.data.msg 
+        this.SignUp.name = '',
+        this.SignUp.email = '',
+        this.SignUp.password = ''
       })
     },
      getUserData() {
@@ -225,41 +238,6 @@ export default {
       localStorage.clear()
       this.isConnected = false;
     },
-    // mailer(email){
-
-    //   let transporter = nodemailer.createTransport({
-    //         host: 'smtp.gmail.com',
-    //         port: 587,
-    //         secure: false,
-    //         auth:{
-    //             user : 'adrowicaks@gmail.com',
-    //             pass : 'abcd1234>'
-    //         }
-    //     })
-
-    //     let mailOptions = {
-    //         from: '"adrowicaksono" adrowicaksono@gmail.com',
-    //         to : email,
-    //         subject : "hello",
-    //         text: mail,
-    //         html:`<b> Hello world ${email}<b>
-    //              <p> conngratulation, now you have joined with us. </p>`
-    //     }
-
-    //     transporter.sendMail(mailOptions, (err, info)=>{
-    //         if(err){
-    //             return console.log(err)
-    //         }
-    //         console.log('Message sent: %s', info.messageId)
-    //         console.log('Preview URL: %s',
-    //         nodemailer.getTestMessageUrl(info))
-    //         swal(
-    //             'Good job!',
-    //             'successfully registration, check your email now. ',
-    //             'success'
-    //         )
-    //     })
-    // },
   }
 }
 </script>

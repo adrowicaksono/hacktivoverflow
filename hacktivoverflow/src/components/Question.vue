@@ -37,6 +37,7 @@
 import jwt from 'jsonwebtoken'
 import { VueEditor } from 'vue2-editor'
 import Answers from '@/components/Answers.vue'
+import BASE_URL from '@/BASE_URL/BASE_URL'
 
 export default {
   components: {
@@ -55,7 +56,6 @@ export default {
   },
   mounted(){
     var question = firebase.database().ref('Questions');
-    
     question.on('value', snapshot =>{
       this.getNewPost(snapshot.val());
     });

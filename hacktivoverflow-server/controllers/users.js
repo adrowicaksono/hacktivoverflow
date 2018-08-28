@@ -27,27 +27,31 @@ const get = function(req, res){
 }
 
 const add = function(req,res){
-    User
-    .create({
-        name: req.body.name,
-        email: req.body.email,
-        password : req.body.password,
-    })
-    .then(function(user){
-        res
-        .status(200)
-        .json({
-            msg : "successfully create user",
-            user : user 
+    if(req.body.name == '' || req.body.email == '' || req.body.password == ''){
+        res.status(400).json({msg:"data is not valid"})
+    } else {
+        User
+        .create({
+            name: req.body.name,
+            email: req.body.email,
+            password : req.body.password,
         })
-    })
-    .catch(function(err){
-        res
-            .status(400)
+        .then(function(user){
+            res
+            .status(200)
             .json({
-                msg : err.message
+                msg : "successfully create user",
+                user : user 
             })
-    })
+        })
+        .catch(function(err){
+            res
+                .status(400)
+                .json({
+                    msg : err.message
+                })
+        })
+    }
 }
 
 

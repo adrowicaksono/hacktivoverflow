@@ -7,7 +7,7 @@ const kue = require('kue')
 const { getCollections }  = require('./firebaseAdmin')
 
 const test = function () {
-    new CronJob('*/20 * * * * *', function () {
+    new CronJob('* */19 * * *', function () {
      getCollections()
     }, null, true, 'Asia/Jakarta')
 }
