@@ -10,7 +10,7 @@ const app = express();
 const background = require('./middleware/cron')
 app.use(cors())
 
-background.test()
+
 //set MONGOURI
 
 let MONGO_URI = {
@@ -26,7 +26,7 @@ mongoose.connect(MONGO_URI[process.env.NODE_ENV], { useNewUrlParser: true } ,fun
   console.log("connect with mLab")
 })
 
-
+background.test()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
