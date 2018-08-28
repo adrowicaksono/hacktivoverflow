@@ -23,24 +23,61 @@
                 </md-button>
             </vs-col>
             <vs-col vs-type="flex" vs-justify="flex-end" vs-align="flex-end"  vs-sm="12" vs-w="4">
-                <md-button class="md-fab md-mini md-plain">
+                <md-button class="md-fab md-mini md-plain" @click="editAnswer">
                 <md-icon >edit</md-icon>
                 </md-button>
             </vs-col>
         </vs-row>
+        <vs-popup class="holamundo" :bind:vs-title="cidEdited" :vs-active="popupActivo4" @vs-cancel="popupActivo4=false">
+            <vue-editor v-model="contentEdited" ></vue-editor>
+             <vs-button v-on:click="closePopup" vs-type="relief">Submit</vs-button>
+        </vs-popup>
     </div>  
 </template>
 
 <script>
 import jwt from 'jsonwebtoken'
+
+import { VueEditor } from 'vue2-editor'
+
 export default {
     props:['answer'],
+    components:{
+        VueEditor
+    },
     data(){
         return{
-           badge1:10,     
+           contentEdited : '',
+           cidEdited : '',
+           qidEdited : '',
+           popupActivo4 : false,     
         }
     },
     methods:{
+        editAcc(){
+          let newContent = this.contentEdited
+          let cid = this.cidEdited
+          let qid = this.qidEdited
+          var updates = {};
+          updates['Questions/' + qid + '/Comments/' + cid + '/content'] =  newContent;
+          firebase.database().ref().update(updates)
+        },
+        closePopup(){
+            // this.editAcc()
+             this.popupActivo4 = false
+        },
+        editAnswer(){
+
+            let token =localStorage.getItem("token")
+            var decoded = jwt.verify(token, 'hacktiv8');
+            if(decoded.id == this.answer.uid){
+            this.contentEdited = this.answer.content
+            this.cidEdited = this.answer.cid
+            this.qidEdited = this.answer.qid
+            this.popupActivo4 = true
+            console.log("=======apaaaa======", this.answer)
+            }
+        },
         upVote(answer){
             console.log(answer.cid)
         let token =localStorage.getItem("token")

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "hacktivoverflow-4332b",
+  "private_key_id": "0b9f7b58097804b20e27f07f10510af307e4f952",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCskDM+Y38ycUSI\neCsmAq6LKVTmA/f1kERspQjwpj1LBqThVFbkElE9eYAMqZBfyeZs+s3W2ASRwFew\nEGDnTjr7bGIPh5mtZc/6qP1wQAxMc8rZPQgoGMI61+d0ydNWlxXeOTg4ZjiPCVV4\n19Pz9fmD32YGBcllRlCZ5XkWffK5M/ulea8mVrhEXzD6r3M63BXAIJ7UKkdVuxgn\n5qyNjl7yDna7/MJnO83KvG6Qc3MmUusZTU9Ly/N4WognkIhuvyOKDDMcuOeqtaCC\nmbZZLVwWVIaqMea80iTR9VhvumMsmj+TY6I50o+bPBvHd7ANUE2Su7bh1EV1bTIn\no3ZwVNvVAgMBAAECggEAFAifsmAJvdjxjGhrFfwcuHJBdXzDdkJb90MHsSyTlBi+\n3pwUhGDuBpWK/K1Y4g4GDuPlLsqgaS1r4LheD6yA43yXO9dRy5Q025Rv6+67nsqY\no7TWtBT/w6YaLHBb9UMQGl8JPF79tPlv71obNMj7QUiXxx433eaWZ++AqdBQdBi4\nGbKXC4FiuTloIQlJfuIm+uUPwuZfmUJZCpn1KX9tbSsbVTEA6LpFmn6wsvdlg6Af\ndNEA2P1Ch5dzNv8wQDvGeQngfq+YM44n89iki4g8OJZwa8TmFN5H5hfE9ODMlk5w\n6H1rDLTKqL37qGeExDgQbmc4a1T9zC4L2pVfwNSpFwKBgQDxgCiOnXaGfzj1SPoX\nngPlua6lLBa494aIwvMKEq4Y70jeBH6nj1U/T4LzIiC28HDZYWljr66slfExk13F\nVM2JVPmPaWCuwjIM16U7Ibx4ckRFHJLxXzWdIwZw6+DoFKqwIf6r9/uvVbYQn1dd\nvDfnA7ymSfcQgamdls0LAZLITwKBgQC27Hs+k+5VyPsNf9SHxKBn+lS/d1FmCcET\nMJBinspwfIVZLpcVhPj3iKgOG6Is6LF2xyIx1Jp1Vqk9VDSr8DRMvglI2kmbTXmv\nOWlSnbeWx/4eyg5mpQw6SJu6dRHw4vmhWGJNcrdjLCY4s4BTiXE0qWuulDdoseOk\n9tAMk3gsmwKBgHkhtzYRdSnxFjix6f9+mqXXhOoEO0F7pldisVUUGY8YNoxl5MFW\n+4NN9njNXWtlHrVqTtpZfFvEub4MFLSt3IpNvP9Z88y0SzZ108LdIROo/OVNd8bp\n4pJ2xvxM0/qUoyjFZGANeohvjWq5AbFafw+4qB8ganQ1FUaeJSqoF1+xAoGAGWv8\nJNJCSUHJQjMFwmidMlYj+QgIE/o/Dv+s0UfoMoHbtm03KhJ011HyqSNGAp/EKhG6\nutolLTGCC7fsKgkT+6Zde/Z6TE8UHjoIXSb2IMpikrzaC4HclS0KF3u1ppikwLub\nzc+nlOzJ0w9/QhzT0tHI2VZX7QDr9j0m5NiJ1wkCgYEA3Cz6LMQQurySjxiu7bZX\nUtodQMDl1Hjmse7zI1ytao0COBEw6XUl2rf5+PxsN4w13uTLvwp5KsaJxf7FQy2C\nxTLQqcaYZxP95X/uIudrOQ1vy7gHYIzo9EuczWXsB5EFzR5BD8m8DCwVzFbQ5F2m\n2o6hRC+p3Wv9dD+2c2GGgKY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-9cb24@hacktivoverflow-4332b.iam.gserviceaccount.com",
+  "client_id": "106650621911513247553",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-9cb24%40hacktivoverflow-4332b.iam.gserviceaccount.com"
+}
