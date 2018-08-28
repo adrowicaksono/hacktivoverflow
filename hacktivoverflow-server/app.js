@@ -7,9 +7,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose')
 const app = express();
+const background = require('./middleware/cron')
 app.use(cors())
 
-
+background.test()
 //set MONGOURI
 
 let MONGO_URI = {
