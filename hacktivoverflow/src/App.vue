@@ -43,8 +43,11 @@
          Enter your email dan password to <b>continue</b>
          <vs-input placeholder="email" v-model="SignIn.email"/>
          <vs-input type="password" placeholder="password" v-model="SignIn.password"/>
-         <vs-alert :vs-active="!validName" vs-color="danger" vs-icon="new_releases" >
-           Fields can not be empty please enter the data
+         <vs-alert :vs-active="!SignIn.email" vs-color="danger" vs-icon="new_releases" >
+           email can not be empty please enter the data
+         </vs-alert>
+         <vs-alert :vs-active="!SignIn.password" vs-color="danger" vs-icon="new_releases" >
+           password can not be empty please enter the data
          </vs-alert>
          <facebook-login class="button"
             appId="935675349937864"
@@ -52,6 +55,7 @@
             @logout="onLogout"
             @get-initial-status="getUserData">
           </facebook-login>
+          <vs-button  class="becenter" @click="googleSignIn" vs-color="success" vs-type="relief">Google SignIn</vs-button>
        </div>
      </vs-prompt>
 
@@ -147,6 +151,41 @@ export default {
     }
   },
   methods:{
+    googleSignIn(){
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+      firebase.auth().signInWithPopup(provider).then((result) => {
+        var token = result.credential.accessToken;
+        var user = result.user;
+        console.log(token, "auth firebase")
+
+            axios.post(BASE_URL+'auth/google', {
+              accessToken : token
+            })
+            .then( response => {
+              console.log(response.data.token, "======")
+              this.hasLogin = true
+              localStorage.setItem("token", response.data.token)
+              this.activeSignIn = false
+              localStorage.setItem("userId", response.data.userId)
+              // this.SignIn.email = ''
+              // this.SignIn.password = ''
+              this.error = ''
+            })
+            .catch( err => {
+              // this.error = err
+            })
+
+      }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+        this.error = errorMessage
+      });
+    },
     signIn(){
       console.log("disign In")
       this.getUserData()
@@ -169,7 +208,6 @@ export default {
         password: this.SignIn.password
       })
       .then((respons)=>{
-        this.hasLogin = true
         localStorage.setItem("token", respons.data.token)
         localStorage.setItem("userId", respons.data.userId)
         this.hasLogin = true

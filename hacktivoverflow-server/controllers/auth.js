@@ -2,6 +2,7 @@ const User = require('../models/user')
 const FB = require('fb')
 var jwt = require('jsonwebtoken');
 require('dotenv').config()
+const axios = require('axios')
 
 const login = function(req,res){
     let email = req.body.email
@@ -109,10 +110,61 @@ loginFacebook = function(req,res){
                 })
             }) 
 }
+// https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.GlsIBiTEbTiYGMbAfu7ndVB5dyoYGddYRz-xKPZ6_Q3KFx4LP529BK2oDrEh6t_V5fHlcZr5FbZNbqwxC01D1Ie4PH-rgrVNtggR_2AhjaExXnogEv0vPo2DOROO
+const loginGoogle = function (req, res) {
+    console.log(req.body.accessToken)
+    let url = `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${req.body.accessToken}`
+    axios.get(url)
+    .then(response => {
+        console.log(response.data)
+        User
+        .findOne({email:response.data.email})
+        .then(function(user){
+            if(user){
+                console.log("ada user nya", user)
+                var token = jwt.sign({ id:user.id, name:user.name, email:user.email }, process.env.tokenSecretKey);
+                res.status(200).json({token:token})
+            } else {
+                let name = response.data.name
+                let email = response.data.email
+                let password = name.split(' ')[0]+process.env.tokenSecretKey
+                console.log(name, email, password, "======================= user baru")
+                User
+                .create({
+                    name:name,
+                    email:email,
+                    password:password,
+                })
+                .then(function(user){
+                    var token = jwt.sign({ id:user.id, name:user.name, email:user.email }, process.env.tokenSecretKey);
+                    console.log("dari server token (user baru):", token )
+                    res
+                        .status(200)
+                        .json({
+                            token:token,
+                            userId :user._id
+                        })
+                })
+                .catch(function(err){
+                    res
+                        .status(400)
+                        .json(err)
+                })
+            } 
+        })
+        .catch( err =>{
+            res.status(400).json(err)
+        })
 
-
+    })
+    .catch( err => {
+        console.log(err)
+        res.status(400).json({msg:"your acces token is not valid"})
+    })
+} 
 
 module.exports = {
     login,
-    loginFacebook
+    loginFacebook,
+    loginGoogle
 }
