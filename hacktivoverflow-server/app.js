@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose')
 const app = express();
+const background = require('./middleware/cron')
 app.use(cors())
 
 
@@ -25,7 +26,7 @@ mongoose.connect(MONGO_URI[process.env.NODE_ENV], { useNewUrlParser: true } ,fun
   console.log("connect with mLab")
 })
 
-
+background.test()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
