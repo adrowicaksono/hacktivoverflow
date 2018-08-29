@@ -110,7 +110,7 @@ loginFacebook = function(req,res){
                 })
             }) 
 }
-// https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.GlsIBiTEbTiYGMbAfu7ndVB5dyoYGddYRz-xKPZ6_Q3KFx4LP529BK2oDrEh6t_V5fHlcZr5FbZNbqwxC01D1Ie4PH-rgrVNtggR_2AhjaExXnogEv0vPo2DOROO
+
 const loginGoogle = function (req, res) {
     console.log(req.body.accessToken)
     let url = `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${req.body.accessToken}`
