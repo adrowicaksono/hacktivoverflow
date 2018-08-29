@@ -7,7 +7,7 @@ const CronJob = require('cron').CronJob;
 const { getCollections }  = require('./firebaseAdmin')
 
 const test = function () {
-    new CronJob('* */19 * * *', function () {
+    new CronJob('* 19 * * *', function () {
      getCollections()
     }, null, true, 'Asia/Jakarta')
 }
