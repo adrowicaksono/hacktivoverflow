@@ -14,7 +14,7 @@
                 >
                  <div>
                      <DetailAnswer
-                      v-for="(answer, i) in answers" :key="{i}"
+                      v-for="answer in answers" :key="answer.aid"
                       v-bind:answer="answer"
                      />
                  </div>

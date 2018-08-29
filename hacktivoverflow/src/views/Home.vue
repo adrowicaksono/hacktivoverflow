@@ -4,8 +4,14 @@
       <HelloWorld/>
     </vs-row>
     <vs-row vs-w="12">
-      <Question/>
+      <vs-col vs-w="5">
+       <ListQuestion/> 
+      </vs-col>
+      <vs-col vs-w="7">
+          <router-view></router-view>
+      </vs-col>
     </vs-row>
+    
   </div>
 </template>
 
@@ -13,11 +19,13 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import Question from '@/components/Question.vue'
+import ListQuestion from '@/components/ListQuestion.vue'
 export default {
   name: 'home',
   components: {
     HelloWorld,
-    Question
+    Question,
+    ListQuestion
   }
 }
 </script>

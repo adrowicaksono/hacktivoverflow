@@ -1,8 +1,8 @@
 const CronJob = require('cron').CronJob;
 
 
-const kue = require('kue')
-    , queue = kue.createQueue()
+// const kue = require('kue')
+//     , queue = kue.createQueue()
 
 const { getCollections }  = require('./firebaseAdmin')
 
